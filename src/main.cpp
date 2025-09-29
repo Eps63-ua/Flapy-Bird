@@ -27,5 +27,6 @@ int main()
         state_machine.getCurrentState()->render(); 
     }
 
+    CloseWindow();
     return 0;
 }

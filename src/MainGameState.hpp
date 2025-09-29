@@ -7,7 +7,7 @@ extern "C" {
 }
 
 struct Bird {
-    float x, y, vy;
+    float x, y, vy, height, width;
 };
 
 struct PipePair { 
@@ -19,7 +19,7 @@ class MainGameState : public GameState
 {
     public:
         MainGameState();
-        ~MainGameState() = default;
+        ~MainGameState() override;
 
         void init() override;
         void handleInput() override;
@@ -37,18 +37,27 @@ class MainGameState : public GameState
         Bird player{200.f, 200.f, 0.f};
         const float GRAVITY = 900.f;
         const float JUMP_VY = -300.f;
-        const float RADIUS  = 17.f;
-        Rectangle bird_bb; // bounding box del pájaro
+        float RADIUS  = 17.f;
+
+        //bounding box
+        Rectangle bird_bb; 
+        bool colision = false;
 
         //tuberias
         std::deque<PipePair> pipes;
-        const float PIPE_W = 32.f;
-        const float PIPE_H = 320.f;
-        const float PIPE_SPEED = 100.f; // píxeles por segundo
-        const float GAP = 120.f;        // separación entre tuberías
+        float PIPE_W = 32.f;
+        float PIPE_H = 320.f;
+        float PIPE_SPEED = 100.f; // píxeles por segundo
+        float GAP = 120.f;        // separación entre tuberías
        
         float spawnTimer = 0.f;
-        const float spawnEvery = 2.0f;  // cada 2 segundos aparece un par de tuberías
+        float spawnEvery = 2.0f;  // cada 2 segundos aparece un par de tuberías
 
+        //puntuacion
+        int score = 0;
+
+        //texturas
+        Texture2D birdSprite;
+        Texture2D pipeSprite;
 
 };

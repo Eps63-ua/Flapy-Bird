@@ -18,7 +18,7 @@ struct PipePair {
 class MainGameState : public GameState
 {
     public:
-        MainGameState();
+        MainGameState(bool night = bool{});
         ~MainGameState() override;
 
         void init() override;
@@ -63,10 +63,10 @@ class MainGameState : public GameState
         //temporizador cambio
         float backgroundTimer = 0.0f;
         bool isNight = false;
-        const float backgroundSwapTime = 20.0f; 
+        const float backgroundSwapTime = 10.0f; 
         //degradado cambio
         bool fading = false;             
-        float fadeTime = 4.0f;           
+        float fadeTime = 5.0f;           
         float fadeProgress = 0.0f;       
 
 
@@ -75,6 +75,7 @@ class MainGameState : public GameState
         Texture2D pipeSprite;
         Texture2D backgroundDay;
         Texture2D backgroundNight;
+        Texture2D startingBackground{};
         Texture2D baseSprite;
 
 };

@@ -1,13 +1,19 @@
 #pragma once
 #include "GameState.hpp"
+#include <deque> 
+
+
+extern "C" {
+    #include <raylib.h>
+}
 
 
 class GameOverState : public GameState
 {
 
     public:
-        GameOverState(int score);
-        ~GameOverState() override = default;
+        GameOverState(int score, bool night);
+        ~GameOverState() override;
 
         void init() override;
         void handleInput() override;
@@ -19,4 +25,7 @@ class GameOverState : public GameState
 
     private:
         int finalScore = 0;
+        Texture2D gameOverText;
+        Texture2D background;
+        bool isNight = false;
 };

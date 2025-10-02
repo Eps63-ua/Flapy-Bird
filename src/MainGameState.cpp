@@ -7,8 +7,9 @@ extern "C" {
     #include <raylib.h>
 }
 
-MainGameState::MainGameState()
+MainGameState::MainGameState(bool night)
 {
+    isNight = night;
 }
 
 MainGameState::~MainGameState() {
@@ -105,13 +106,13 @@ void MainGameState::update(float deltaTime)
     for (const auto& p : pipes) {
         if (CheckCollisionRecs(bird_bb, p.top) || CheckCollisionRecs(bird_bb, p.bot)) {
             colision = true;
-            this->state_machine->add_state(std::make_unique<GameOverState>(score), true);
+            this->state_machine->add_state(std::make_unique<GameOverState>(score, isNight), true);
             return;
         }
     }
 
     if(CheckCollisionRecs(bird_bb, base)){
-        this->state_machine->add_state(std::make_unique<GameOverState>(score), true);
+        this->state_machine->add_state(std::make_unique<GameOverState>(score, isNight), true);
         return;
     }
 
@@ -144,9 +145,6 @@ void MainGameState::update(float deltaTime)
     if (GAP > 80.0f) {
         GAP -= deltaTime; 
     }
-
-
-
 }
 
 void MainGameState::render()

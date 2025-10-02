@@ -1,5 +1,5 @@
 #include "StateMachine.hpp"
-#include "MainGameState.hpp"
+#include "StartGameState.hpp"
 #include <memory>
 #include <chrono>
 
@@ -15,7 +15,7 @@ int main()
     InitWindow(288, 512, "Flapy Bird");
 
     StateMachine state_machine = StateMachine();
-    state_machine.add_state(std::make_unique<MainGameState>(), false);
+    state_machine.add_state(std::make_unique<StartGameState>(), false);
     state_machine.handle_state_changes(delta_time);
         
     while (!WindowShouldClose())

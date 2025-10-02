@@ -14,14 +14,21 @@ MainGameState::MainGameState()
 MainGameState::~MainGameState() {
     UnloadTexture(birdSprite);
     UnloadTexture(pipeSprite);
+    UnloadTexture(backgroundDay);
+    UnloadTexture(backgroundNight);
+    UnloadTexture(baseSprite);
 }
 
 
 void MainGameState::init()
 {
     //texturas
-    birdSprite = LoadTexture("assets/bluebird-downflap.png");
-    pipeSprite = LoadTexture("assets/pipe-green.png");
+    birdSprite = LoadTexture("assets/sprites/bluebird-downflap.png");
+    pipeSprite = LoadTexture("assets/sprites/pipe-green.png");
+    backgroundDay = LoadTexture("assets/sprites/background-day.png");
+    backgroundNight = LoadTexture("assets/sprites/background-night.png");
+    baseSprite = LoadTexture("assets/sprites/base.png");
+
 
     //dimension bird
     player.width = (float)birdSprite.width;

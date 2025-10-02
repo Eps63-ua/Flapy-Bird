@@ -18,7 +18,7 @@ int main()
     state_machine.add_state(std::make_unique<MainGameState>(), false);
     state_machine.handle_state_changes(delta_time);
         
-    while (!state_machine.is_game_ending())
+    while (!WindowShouldClose())
     {
         delta_time = GetFrameTime();      
         state_machine.handle_state_changes(delta_time);
@@ -27,6 +27,6 @@ int main()
         state_machine.getCurrentState()->render(); 
     }
 
-    CloseWindow();
+    CloseWindow(); 
     return 0;
 }

@@ -34,14 +34,17 @@ class MainGameState : public GameState
         char entered_key;
         
         //pajaro
-        Bird player{200.f, 200.f, 0.f};
+        Bird player{144.f, 144.f, 0.f};
         const float GRAVITY = 900.f;
         const float JUMP_VY = -300.f;
         float RADIUS  = 17.f;
 
         //bounding box
         Rectangle bird_bb; 
-        bool colision = false;
+        
+        //base
+        Rectangle base;
+        bool colision = false; //colision con tuberias o base
 
         //tuberias
         std::deque<PipePair> pipes;
@@ -56,8 +59,22 @@ class MainGameState : public GameState
         //puntuacion
         int score = 0;
 
+        //FONDO
+        //temporizador cambio
+        float backgroundTimer = 0.0f;
+        bool isNight = false;
+        const float backgroundSwapTime = 20.0f; 
+        //degradado cambio
+        bool fading = false;             
+        float fadeTime = 4.0f;           
+        float fadeProgress = 0.0f;       
+
+
         //texturas
         Texture2D birdSprite;
         Texture2D pipeSprite;
+        Texture2D backgroundDay;
+        Texture2D backgroundNight;
+        Texture2D baseSprite;
 
 };

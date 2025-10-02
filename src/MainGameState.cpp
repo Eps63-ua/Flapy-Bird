@@ -59,6 +59,10 @@ void MainGameState::update(float deltaTime)
     //bounding box
     bird_bb = {player.x, player.y, player.width, player.height};   
 
+    //base
+    float baseY = GetScreenHeight() - baseSprite.height;
+    base = {0.0f, baseY, (float)GetScreenWidth(), (float)baseSprite.height};
+
     
     //tuberias
     spawnTimer += deltaTime;
@@ -105,13 +109,69 @@ void MainGameState::update(float deltaTime)
             return;
         }
     }
+
+    if(CheckCollisionRecs(bird_bb, base)){
+        this->state_machine->add_state(std::make_unique<GameOverState>(score), true);
+        return;
+    }
+
+    //cambio fondo con degradado
+    backgroundTimer += deltaTime;
+
+    if (!fading && backgroundTimer >= backgroundSwapTime) {
+        fading = true;
+        fadeProgress = 0.0f;
+        backgroundTimer = 0.0f;
+    }
+        
+    if (fading) {
+        fadeProgress += deltaTime / fadeTime;
+
+        if (fadeProgress >= 1.0f) {
+            fadeProgress = 1.0f;
+            fading = false;
+            isNight = !isNight; 
+        }
+    }
+
+    //aumentar complejidad
+    PIPE_SPEED += 2.0f * deltaTime;  // +2 px/s cada segundo
+    
+    if (spawnEvery > 0.8f) {
+        spawnEvery -= 0.01f * deltaTime; // reducir tiempo entre spawns
+    }
+
+    if (GAP > 80.0f) {
+        GAP -= deltaTime; 
+    }
+
+
+
 }
 
 void MainGameState::render()
 {
     BeginDrawing();
-    ClearBackground(RAYWHITE);
+    
+    //FONDO cambio con degradado
+    Texture2D from = isNight ? backgroundNight : backgroundDay;
+    Texture2D to   = isNight ? backgroundDay   : backgroundNight;
+
+    if (fading) {
+        // fase de mezcla
+        DrawTexture(from, 0, 0, WHITE);
+
+        // alpha crece de 0 → 255
+        unsigned char alpha = (unsigned char)(fadeProgress * 255.0f);
+        Color fadeColor = {255, 255, 255, alpha};
+        DrawTexture(to, 0, 0, fadeColor);
+    } else {
+        DrawTexture(from, 0, 0, WHITE);
+    }
+
+    //texto
     DrawText("Flapy Bird", 10, 10, 20, LIGHTGRAY);
+    
     //pajaro
     DrawTexture(birdSprite, player.x, player.y, WHITE);
 
@@ -123,6 +183,10 @@ void MainGameState::render()
         DrawTextureEx(this->pipeSprite, {p.top.x + PIPE_W, p.top.y + PIPE_H}, 180.f, 1.0f, WHITE);
         DrawTextureEx(this->pipeSprite, {p.bot.x , p.bot.y}, 0.f, 1.0f, WHITE);
     }
+
+    //base
+    float altura = GetScreenHeight() - baseSprite.height;
+    DrawTexture(baseSprite, 0, altura, WHITE);
 
     std::string s = std::to_string(score);
     int textW = MeasureText(s.c_str(), 30);

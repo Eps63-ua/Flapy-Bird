@@ -77,6 +77,8 @@ class MainGameState : public GameState
         Texture2D backgroundNight;
         Texture2D startingBackground{};
         Texture2D baseSprite;
+        Texture2D numberSprites[10];
+
 
         //sonidos
         Sound flapSound;

@@ -20,6 +20,11 @@ MainGameState::~MainGameState() {
     UnloadTexture(backgroundNight);
     UnloadTexture(baseSprite);
 
+    //numeros
+    for (int i = 0; i < 10; i++) {
+        UnloadTexture(numberSprites[i]);
+    }
+
     //sonidos
     UnloadSound(flapSound);
     UnloadSound(scoreSound);
@@ -36,6 +41,10 @@ void MainGameState::init()
     backgroundDay = LoadTexture("assets/sprites/background-day.png");
     backgroundNight = LoadTexture("assets/sprites/background-night.png");
     baseSprite = LoadTexture("assets/sprites/base.png");
+    // numeros
+    for (int i = 0; i < 10; i++) {
+        numberSprites[i] = LoadTexture(("assets/sprites/" + std::to_string(i) + ".png").c_str());
+    }
     
     //sonidos
     flapSound = LoadSound("assets/audio/wing.wav");
@@ -203,11 +212,15 @@ void MainGameState::render()
     float altura = GetScreenHeight() - baseSprite.height;
     DrawTexture(baseSprite, 0, altura, WHITE);
 
-    std::string s = std::to_string(score);
-    int textW = MeasureText(s.c_str(), 30);
-    int x = (GetScreenWidth() - textW) / 2;  // centrado horizontal
-    int y = 20;                               // margen superior
-    DrawText(s.c_str(), x, y, 30, BLACK);
+    //puntuacion
+    std::string scoreStr = std::to_string(score);
+    int totalWidth = scoreStr.length() * numberSprites[0].width;
+    int startX = (GetScreenWidth() - totalWidth) / 2;
+
+    for (size_t i = 0; i < scoreStr.length(); i++) {
+        int digit = scoreStr[i] - '0';
+        DrawTexture(numberSprites[digit], startX + i * numberSprites[digit].width, 20, WHITE);
+    }
 
     EndDrawing();
 }

@@ -13,23 +13,34 @@ MainGameState::MainGameState(bool night)
 }
 
 MainGameState::~MainGameState() {
+    //texturas
     UnloadTexture(birdSprite);
     UnloadTexture(pipeSprite);
     UnloadTexture(backgroundDay);
     UnloadTexture(backgroundNight);
     UnloadTexture(baseSprite);
+
+    //sonidos
+    UnloadSound(flapSound);
+    UnloadSound(scoreSound);
+    UnloadSound(hitSound);
 }
 
 
 void MainGameState::init()
 {
+    //CARGAMOS ASSETS
     //texturas
     birdSprite = LoadTexture("assets/sprites/bluebird-downflap.png");
     pipeSprite = LoadTexture("assets/sprites/pipe-green.png");
     backgroundDay = LoadTexture("assets/sprites/background-day.png");
     backgroundNight = LoadTexture("assets/sprites/background-night.png");
     baseSprite = LoadTexture("assets/sprites/base.png");
-
+    
+    //sonidos
+    flapSound = LoadSound("assets/audio/wing.wav");
+    scoreSound = LoadSound("assets/audio/point.wav");
+    hitSound = LoadSound("assets/audio/hit.wav");
 
     //dimension bird
     player.width = (float)birdSprite.width;
@@ -47,6 +58,7 @@ void MainGameState::handleInput()
 {
     if (IsKeyPressed(KEY_SPACE))
     {
+        PlaySound(flapSound);
         player.vy = JUMP_VY;
     }
 }
@@ -93,6 +105,7 @@ void MainGameState::update(float deltaTime)
         if (!p.scored && (p.top.x + PIPE_W) < (player.x - RADIUS)) { // comparar borde dcho del tubo con el pájaro
             score++;
             p.scored = true;
+            PlaySound(scoreSound);
         }
     }
 
@@ -106,12 +119,16 @@ void MainGameState::update(float deltaTime)
     for (const auto& p : pipes) {
         if (CheckCollisionRecs(bird_bb, p.top) || CheckCollisionRecs(bird_bb, p.bot)) {
             colision = true;
+            PlaySound(hitSound);
+            WaitTime(0.2);
             this->state_machine->add_state(std::make_unique<GameOverState>(score, isNight), true);
             return;
         }
     }
 
     if(CheckCollisionRecs(bird_bb, base)){
+        PlaySound(hitSound);
+        WaitTime(0.2);
         this->state_machine->add_state(std::make_unique<GameOverState>(score, isNight), true);
         return;
     }
@@ -174,7 +191,7 @@ void MainGameState::render()
     DrawTexture(birdSprite, player.x, player.y, WHITE);
 
     //BB
-    DrawRectangleLinesEx(bird_bb, 2.0f, BLUE);
+    //DrawRectangleLinesEx(bird_bb, 2.0f, BLUE);
 
     //tuberias
     for (const auto& p : pipes) {

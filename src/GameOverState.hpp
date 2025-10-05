@@ -28,4 +28,7 @@ class GameOverState : public GameState
         Texture2D gameOverText;
         Texture2D background;
         bool isNight = false;
+
+        Sound dieSound;
+
 };

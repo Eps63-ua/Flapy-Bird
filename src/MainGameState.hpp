@@ -78,4 +78,8 @@ class MainGameState : public GameState
         Texture2D startingBackground{};
         Texture2D baseSprite;
 
+        //sonidos
+        Sound flapSound;
+        Sound scoreSound;
+        Sound hitSound;
 };

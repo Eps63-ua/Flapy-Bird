@@ -15,16 +15,20 @@ GameOverState::GameOverState(int score, bool night)
 
 GameOverState::~GameOverState() {
     UnloadTexture(gameOverText);
+    UnloadSound(dieSound);
 }
 
 void GameOverState::init() {
     gameOverText = LoadTexture("assets/sprites/gameover.png");
+    dieSound = LoadSound("assets/audio/die.wav");
+    
     if(isNight){
 
         background = LoadTexture("assets/sprites/background-night.png");
     }else{
         background = LoadTexture("assets/sprites/background-day.png");
     }
+    PlaySound(dieSound);
 }
 
 void GameOverState::handleInput() {

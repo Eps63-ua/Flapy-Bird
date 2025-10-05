@@ -18,6 +18,8 @@ int main()
     state_machine.add_state(std::make_unique<StartGameState>(), false);
     state_machine.handle_state_changes(delta_time);
         
+    InitAudioDevice();
+
     while (!WindowShouldClose())
     {
         delta_time = GetFrameTime();      
@@ -28,5 +30,6 @@ int main()
     }
 
     CloseWindow(); 
+    CloseAudioDevice(); 
     return 0;
 }
